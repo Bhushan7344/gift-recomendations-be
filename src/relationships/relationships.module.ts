@@ -3,7 +3,7 @@ import { RelationshipsService } from './relationships.service';
 import { RelationshipsController } from './relationships.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRelationships } from './user-relationships.entity';
-import { UserRelationshipPreferences } from './user-relationship-preferences.entity';
+import { UserRelationshipPreferences } from '../relate-preferences/user-relationship-preferences.entity';
 
 @Module({
   imports: [

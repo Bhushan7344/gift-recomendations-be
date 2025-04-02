@@ -7,7 +7,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 import { User } from '../users/users.entity';
-import { UserRelationshipPreferences } from './user-relationship-preferences.entity';
+import { UserRelationshipPreferences } from '../relate-preferences/user-relationship-preferences.entity';
 
 @Entity('user_relationships')
 export class UserRelationships {

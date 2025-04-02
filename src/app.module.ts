@@ -12,8 +12,8 @@ import { RelationshipsModule } from './relationships/relationships.module';
 import { User } from './users/users.entity';
 import { UserPreferences } from './preferences/preference.entity';
 import { Gift } from './gifts/gift.entity';
-import { GiftHistory } from './gifts/gift-history.entity';
-import { UserRelationshipPreferences } from './relationships/user-relationship-preferences.entity';
+import { GiftHistory } from './gift-history/gift-history.entity';
+import { UserRelationshipPreferences } from './relate-preferences/user-relationship-preferences.entity';
 import { UserRelationships } from './relationships/user-relationships.entity';
 import { Notification } from './notifications/notifications.entity';
 import {
@@ -23,6 +23,8 @@ import {
   DATABASE_PASSWORD,
   DATABASE_NAME,
 } from '../constants';
+import { RelatePreferencesModule } from './relate-preferences/relate-preferences.module';
+import { GiftHistoryModule } from './gift-history/gift-history.module';
 
 @Module({
   imports: [
@@ -51,6 +53,8 @@ import {
     PreferencesModule,
     NotificationsModule,
     RelationshipsModule,
+    RelatePreferencesModule,
+    GiftHistoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

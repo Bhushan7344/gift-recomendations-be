@@ -22,8 +22,8 @@ export class Gift {
   @Column()
   category: string;
 
-  @Column('json')
-  age_range: string[];
+  @Column()
+  age_range: string;
 
   @Column()
   gender: string;

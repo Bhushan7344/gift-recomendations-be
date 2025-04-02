@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { UserPreferences } from '../preferences/preference.entity';
 import { UserRelationships } from '../relationships/user-relationships.entity';
-import { GiftHistory } from '../gifts/gift-history.entity';
+import { GiftHistory } from '../gift-history/gift-history.entity';
 import { Notification } from '../notifications/notifications.entity';
 
 @Entity('users')

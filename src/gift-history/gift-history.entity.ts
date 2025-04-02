@@ -6,7 +6,7 @@ import {
 } from 'typeorm';
 import { User } from '../users/users.entity';
 import { UserRelationships } from '../relationships/user-relationships.entity';
-import { Gift } from './gift.entity';
+import { Gift } from '../gifts/gift.entity';
 
 @Entity('gift_history')
 export class GiftHistory {

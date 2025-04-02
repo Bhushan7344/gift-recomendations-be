@@ -1,26 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Gift } from './gift.entity';
-import { CreateGiftDto } from './gifts.dto';
+import { GiftHistory } from './gift-history.entity';
+import { CreateGiftHistoryDto } from './gift-history.dto';
 
 @Injectable()
-export class GiftsService {
+export class GiftHistoryService {
   constructor(
-    @InjectRepository(Gift)
-    private readonly giftRepository: Repository<Gift>,
+    @InjectRepository(GiftHistory)
+    private readonly giftRepository: Repository<GiftHistory>,
   ) {}
 
-  create(createGiftDto: CreateGiftDto): Promise<Gift> {
+  create(createGiftDto: CreateGiftHistoryDto): Promise<GiftHistory | null> {
     const gift = this.giftRepository.create(createGiftDto);
     return this.giftRepository.save(gift);
   }
 
-  findAll(): Promise<Gift[]> {
+  findAll(): Promise<GiftHistory[]> {
     return this.giftRepository.find();
   }
 
-  findOne(id: string): Promise<Gift | null> {
+  findOne(id: string): Promise<GiftHistory | null> {
     return this.giftRepository.findOne({ where: { id } });
   }
 

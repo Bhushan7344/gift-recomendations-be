@@ -5,7 +5,7 @@ import {
   ManyToOne,
   CreateDateColumn,
 } from 'typeorm';
-import { UserRelationships } from './user-relationships.entity';
+import { UserRelationships } from '../relationships/user-relationships.entity';
 
 @Entity('user_relationship_preferences')
 export class UserRelationshipPreferences {
