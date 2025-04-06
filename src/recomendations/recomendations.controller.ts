@@ -1,15 +1,20 @@
-import { Controller, Get, Param } from '@nestjs/common';
-import { RecomendationsService } from './recomendations.service';
-import { Gift } from 'src/gifts/gift.entity';
+import { Body, Controller, Post } from '@nestjs/common';
+import { RecommendationsService } from './recomendations.service';
+import {
+  GiftRecommendationResponseDto,
+  RecommendationRequestDto,
+} from './recomendations.dto';
 
-@Controller('recomendations')
-export class RecomendationsController {
-  constructor(private readonly recommendationsService: RecomendationsService) {}
+@Controller('recommendations')
+export class RecommendationsController {
+  constructor(
+    private readonly recommendationsService: RecommendationsService,
+  ) {}
 
-  @Get(':relationshipId')
+  @Post()
   async getRecommendations(
-    @Param('relationshipId') relationshipId: string,
-  ): Promise<Gift[]> {
-    return this.recommendationsService.getRecommendations(relationshipId);
+    @Body() requestDto: RecommendationRequestDto,
+  ): Promise<GiftRecommendationResponseDto> {
+    return this.recommendationsService.getGiftRecommendations(requestDto);
   }
 }

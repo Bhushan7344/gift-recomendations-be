@@ -2,28 +2,31 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
   CreateDateColumn,
 } from 'typeorm';
-import { UserRelationships } from '../relationships/user-relationships.entity';
 
 @Entity('user_relationship_preferences')
 export class UserRelationshipPreferences {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(
-    () => UserRelationships,
-    (relationship) => relationship.preferences,
-    { onDelete: 'CASCADE' },
-  )
-  relationship: UserRelationships;
+  @Column()
+  relationship_id: string; // Just a foreign key to user_relationships
 
   @Column('json')
   interests: string[];
 
   @Column('json')
   favorite_categories: string[];
+
+  @Column()
+  price_range: string;
+
+  @Column('json')
+  dislikes: string[];
+
+  @Column()
+  notes: string;
 
   @Column()
   age: number;

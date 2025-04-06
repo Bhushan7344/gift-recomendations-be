@@ -5,7 +5,6 @@ import {
   CreateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { UserPreferences } from '../preferences/preference.entity';
 import { UserRelationships } from '../relationships/user-relationships.entity';
 import { GiftHistory } from '../gift-history/gift-history.entity';
 import { Notification } from '../notifications/notifications.entity';
@@ -27,8 +26,23 @@ export class User {
   @CreateDateColumn()
   created_at: Date;
 
-  @OneToMany(() => UserPreferences, (preferences) => preferences.user)
-  preferences: UserPreferences[];
+  @Column()
+  gender: string;
+
+  @CreateDateColumn()
+  birthday: Date;
+
+  @Column('json')
+  interests: string[];
+
+  @Column('json')
+  gift_preferences: string[];
+
+  @Column()
+  bio: string;
+
+  @Column()
+  avatar_url: string;
 
   @OneToMany(() => UserRelationships, (relationship) => relationship.user)
   relationships: UserRelationships[];

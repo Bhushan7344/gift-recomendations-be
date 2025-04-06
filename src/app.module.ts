@@ -5,12 +5,10 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { GiftsModule } from './gifts/gifts.module';
 import { RecomendationsModule } from './recomendations/recomendations.module';
-import { PreferencesModule } from './preferences/preferences.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RelationshipsModule } from './relationships/relationships.module';
 import { User } from './users/users.entity';
-import { UserPreferences } from './preferences/preference.entity';
 import { Gift } from './gifts/gift.entity';
 import { GiftHistory } from './gift-history/gift-history.entity';
 import { UserRelationshipPreferences } from './relate-preferences/user-relationship-preferences.entity';
@@ -42,7 +40,6 @@ import { GiftHistoryModule } from './gift-history/gift-history.module';
         Notification,
         UserRelationshipPreferences,
         UserRelationships,
-        UserPreferences,
       ],
       synchronize: true,
     }),
@@ -50,7 +47,6 @@ import { GiftHistoryModule } from './gift-history/gift-history.module';
     UsersModule,
     GiftsModule,
     RecomendationsModule,
-    PreferencesModule,
     NotificationsModule,
     RelationshipsModule,
     RelatePreferencesModule,

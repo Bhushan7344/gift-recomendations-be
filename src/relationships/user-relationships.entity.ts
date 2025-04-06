@@ -3,11 +3,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  OneToMany,
   CreateDateColumn,
 } from 'typeorm';
 import { User } from '../users/users.entity';
-import { UserRelationshipPreferences } from '../relate-preferences/user-relationship-preferences.entity';
 
 @Entity('user_relationships')
 export class UserRelationships {
@@ -29,13 +27,18 @@ export class UserRelationships {
   @Column({ nullable: true })
   anniversary: Date;
 
+  @Column()
+  notes: string;
+
+  @Column()
+  avatar: string;
+
+  @Column()
+  email: string;
+
+  @Column()
+  phone_number: string;
+
   @CreateDateColumn()
   created_at: Date;
-
-  @OneToMany(
-    () => UserRelationshipPreferences,
-    (preferences) => preferences.relationship,
-    { cascade: true },
-  )
-  preferences: UserRelationshipPreferences[];
 }

@@ -1,65 +1,91 @@
-// recommendations.service.ts
-import { Injectable } from '@nestjs/common';
+// recommendations/recommendations.service.ts
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Gift } from '../gifts/gift.entity';
-import { UserRelationshipPreferences } from '../relate-preferences/user-relationship-preferences.entity';
+import {
+  GiftRecommendationResponseDto,
+  RecommendationRequestDto,
+} from './recomendations.dto';
+import { User } from 'src/users/users.entity';
+import { UserRelationships } from 'src/relationships/user-relationships.entity';
+import { UserRelationshipPreferences } from 'src/relate-preferences/user-relationship-preferences.entity';
+import { GeminiService } from './gemini.service';
 
 @Injectable()
-export class RecomendationsService {
+export class RecommendationsService {
   constructor(
-    @InjectRepository(Gift)
-    private readonly giftRepository: Repository<Gift>,
-
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+    @InjectRepository(UserRelationships)
+    private relationshipsRepository: Repository<UserRelationships>,
     @InjectRepository(UserRelationshipPreferences)
-    private readonly preferencesRepository: Repository<UserRelationshipPreferences>,
+    private preferencesRepository: Repository<UserRelationshipPreferences>,
+    private geminiService: GeminiService,
   ) {}
 
-  async getRecommendations(relationshipId: string): Promise<Gift[]> {
-    // Fetch relationship preferences
-    const preferences = await this.preferencesRepository.findOne({
-      where: { relationship: { id: relationshipId } },
+  async getGiftRecommendations(
+    requestDto: RecommendationRequestDto,
+  ): Promise<GiftRecommendationResponseDto> {
+    // Get user data
+    const user = await this.usersRepository.findOne({
+      where: { id: requestDto.userId },
     });
 
-    if (!preferences) {
-      throw new Error('No preferences found for this relationship');
+    if (!user) {
+      throw new Error('User not found');
     }
 
-    // Fetch all gifts from the database
-    const gifts = await this.giftRepository.find();
-
-    // Compute matching scores
-    const scoredGifts = gifts.map((gift) => {
-      let score = 0;
-
-      // Extract min and max age from age_range (e.g., "18-22" -> [18, 22])
-      const [minAge, maxAge] = gift.age_range.split('-').map(Number);
-
-      // Age range match
-      if (preferences.age >= minAge && preferences.age <= maxAge) {
-        score += 3;
-      }
-
-      // Gender match
-      if (gift.gender === preferences.gender) {
-        score += 3;
-      } else if (gift.gender === 'unisex') {
-        score += 2;
-      }
-
-      // Interest match
-      const matchedInterests = preferences.interests.filter((interest) =>
-        gift.interest_tags.includes(interest),
-      );
-      score += matchedInterests.length * 2;
-
-      return { gift, score };
+    const relationship = await this.relationshipsRepository.findOne({
+      where: {
+        id: requestDto.relationshipId,
+        user: { id: requestDto.userId },
+      },
     });
 
-    // Sort gifts by score (highest first)
-    scoredGifts.sort((a, b) => b.score - a.score);
+    if (!relationship) {
+      throw new NotFoundException('Relationship not found for this user');
+    }
 
-    // Return the top 5 gifts
-    return scoredGifts.slice(0, 5).map((item) => item.gift);
+    const preferences = await this.preferencesRepository.findOne({
+      where: {
+        relationship_id: relationship.id,
+      },
+    });
+
+    // Prepare data for AI
+    const aiRequestData = {
+      giver: {
+        gender: user.gender,
+        interests: user.interests,
+        giftPreferences: user.gift_preferences,
+      },
+      recipient: {
+        name: relationship.name,
+        relationshipType: relationship.relationship_type,
+        age: preferences?.age,
+        gender: preferences?.gender,
+        interests: preferences?.interests || [],
+        favoriteCategories: preferences?.favorite_categories || [],
+        priceRange: preferences?.price_range,
+        dislikes: preferences?.dislikes || [],
+        notes: preferences?.notes,
+        specialDates: {
+          birthdate: relationship.birthdate,
+          anniversary: relationship.anniversary,
+        },
+      },
+      requestContext: {
+        occasion: requestDto.occasion || 'general',
+        budget: requestDto.budget || preferences?.price_range,
+      },
+    };
+
+    // Call Gemini service
+    const giftItems =
+      await this.geminiService.generateGiftRecommendations(aiRequestData);
+
+    return {
+      recommendations: giftItems,
+    };
   }
 }
