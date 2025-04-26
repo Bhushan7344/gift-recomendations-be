@@ -23,11 +23,12 @@ import {
 } from '../constants';
 import { RelatePreferencesModule } from './relate-preferences/relate-preferences.module';
 import { GiftHistoryModule } from './gift-history/gift-history.module';
+import { RefreshToken } from './auth/entities/refresh-token.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: DATABASE_HOST,
       port: parseInt(DATABASE_PORT),
       username: DATABASE_USERNAME,
@@ -40,6 +41,7 @@ import { GiftHistoryModule } from './gift-history/gift-history.module';
         Notification,
         UserRelationshipPreferences,
         UserRelationships,
+        RefreshToken,
       ],
       synchronize: true,
     }),

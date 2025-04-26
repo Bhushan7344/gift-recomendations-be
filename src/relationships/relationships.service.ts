@@ -32,9 +32,7 @@ export class RelationshipsService {
     });
   }
 
-  remove(userId: string, id: string): Promise<void> {
-    return this.relationshipsRepository
-      .delete({ id, user: { id: userId } })
-      .then(() => undefined);
+  remove(id: string): Promise<void> {
+    return this.relationshipsRepository.delete({ id }).then(() => undefined);
   }
 }

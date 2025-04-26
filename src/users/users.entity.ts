@@ -20,28 +20,28 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
+  @Column({ nullable: true })
   full_name: string;
 
   @CreateDateColumn()
   created_at: Date;
 
-  @Column()
+  @Column({ nullable: true })
   gender: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ nullable: true })
   birthday: Date;
 
-  @Column('json')
+  @Column('json', { nullable: true })
   interests: string[];
 
-  @Column('json')
+  @Column('json', { nullable: true })
   gift_preferences: string[];
 
-  @Column()
+  @Column({ nullable: true })
   bio: string;
 
-  @Column()
+  @Column({ nullable: true })
   avatar_url: string;
 
   @OneToMany(() => UserRelationships, (relationship) => relationship.user)

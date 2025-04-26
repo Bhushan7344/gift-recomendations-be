@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   CreateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { User } from '../users/users.entity';
 
@@ -13,7 +14,11 @@ export class UserRelationships {
   id: string;
 
   @ManyToOne(() => User, (user) => user.relationships, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @Column()
+  user_id: number;
 
   @Column()
   name: string;
@@ -27,16 +32,16 @@ export class UserRelationships {
   @Column({ nullable: true })
   anniversary: Date;
 
-  @Column()
+  @Column({ nullable: true })
   notes: string;
 
-  @Column()
+  @Column({ nullable: true })
   avatar: string;
 
-  @Column()
+  @Column({ nullable: true })
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   phone_number: string;
 
   @CreateDateColumn()

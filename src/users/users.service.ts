@@ -25,6 +25,10 @@ export class UsersService {
     return this.userRepository.findOne({ where: { id } });
   }
 
+  findByEmail(email: string): Promise<User | null> {
+    return this.userRepository.findOne({ where: { email } });
+  }
+
   remove(id: string): Promise<void> {
     return this.userRepository.delete(id).then(() => undefined);
   }
@@ -32,5 +36,9 @@ export class UsersService {
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User | null> {
     await this.userRepository.update(id, updateUserDto);
     return this.userRepository.findOneBy({ id });
+  }
+
+  async register(createUserDto: CreateUserDto): Promise<User> {
+    return this.create(createUserDto);
   }
 }

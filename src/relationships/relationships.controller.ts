@@ -21,8 +21,8 @@ export class RelationshipsController {
     return this.relationshipsService.findOne(userId, id);
   }
 
-  @Delete(':userId/:id')
-  remove(@Param('userId') userId: string, @Param('id') id: string) {
-    return this.relationshipsService.remove(userId, id);
+  @Delete('/:id')
+  remove(@Param('id') id: string) {
+    return this.relationshipsService.remove(id);
   }
 }
